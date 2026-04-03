@@ -11,20 +11,23 @@ public class HistoriqueResponse {
 
     private List<OperationDto> operations;
     private Double totalCommissions;
-    private Long totalOperations;
+    private Long   totalOperations;
     private Double totalRetraits;
     private Double totalDepots;
+    private Double totalMontant;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     public static class OperationDto {
-        private Long id;
+        private Long   id;
+        private String reference;
         private String type;
         private Double montant;
         private Double commission;
         private String nomClient;
+        private String telephoneClient;
         private String date;
     }
 }

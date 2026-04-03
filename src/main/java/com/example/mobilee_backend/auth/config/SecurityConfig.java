@@ -28,7 +28,8 @@ public class SecurityConfig {
                                 "/api/auth/reset-password",
                                 "/api/dashboard/**",
                                 "/api/operations/**",
-                                "/api/historique/**"
+                                "/api/historique/**",
+                                "/api/admin/**"
                         ).permitAll()
                         // Toutes les autres routes nécessitent un JWT valide
                         .anyRequest().authenticated()

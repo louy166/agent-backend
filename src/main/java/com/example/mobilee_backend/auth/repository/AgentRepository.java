@@ -8,8 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface AgentRepository extends JpaRepository<AgentEntity, Long> {
-    Optional<AgentEntity> findByEmail(String email);
-    Optional<AgentEntity> findByTelephone(String telephone);
-    boolean existsByEmail(String email);
-    boolean existsByTelephone(String telephone);
-}
+
+        Optional<AgentEntity> findByEmail(String email);
+        Optional<AgentEntity> findByTelephone(String telephone);
+        boolean existsByEmail(String email);
+        boolean existsByTelephone(String telephone);
+        boolean existsByNni(String nni);
+    }

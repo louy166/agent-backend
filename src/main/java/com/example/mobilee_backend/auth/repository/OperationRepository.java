@@ -12,35 +12,44 @@ import java.util.List;
 @Repository
 public interface OperationRepository extends JpaRepository<OperationEntity, Long> {
 
-    // Toutes les opérations d'un agent
     List<OperationEntity> findByAgentIdOrderByCreatedAtDesc(Long agentId);
+    List<OperationEntity> findAllByOrderByCreatedAtDesc();
 
-    // Opérations par période
     List<OperationEntity> findByAgentIdAndCreatedAtBetweenOrderByCreatedAtDesc(
             Long agentId, LocalDateTime debut, LocalDateTime fin);
 
-    // Total commissions global
     @Query("SELECT COALESCE(SUM(o.commission), 0) FROM OperationEntity o WHERE o.agent.id = :agentId")
     Double totalCommissions(@Param("agentId") Long agentId);
 
-    // Total commissions par période
     @Query("SELECT COALESCE(SUM(o.commission), 0) FROM OperationEntity o WHERE o.agent.id = :agentId AND o.createdAt BETWEEN :debut AND :fin")
     Double totalCommissionsJour(@Param("agentId") Long agentId,
                                 @Param("debut") LocalDateTime debut,
                                 @Param("fin") LocalDateTime fin);
 
-    // Nombre d'opérations par période
+    @Query("SELECT COALESCE(SUM(o.montant), 0) FROM OperationEntity o WHERE o.agent.id = :agentId")
+    Double totalMontant(@Param("agentId") Long agentId);
+
+    @Query("SELECT COALESCE(SUM(o.montant), 0) FROM OperationEntity o WHERE o.agent.id = :agentId AND o.createdAt BETWEEN :debut AND :fin")
+    Double totalMontantJour(@Param("agentId") Long agentId,
+                            @Param("debut") LocalDateTime debut,
+                            @Param("fin") LocalDateTime fin);
+
     Long countByAgentIdAndCreatedAtBetween(Long agentId, LocalDateTime debut, LocalDateTime fin);
 
-    // Total montant par type et période
     @Query("SELECT COALESCE(SUM(o.montant), 0) FROM OperationEntity o WHERE o.agent.id = :agentId AND o.type = :type AND o.createdAt BETWEEN :debut AND :fin")
     Double totalMontantParType(@Param("agentId") Long agentId,
                                @Param("type") OperationEntity.TypeOperation type,
                                @Param("debut") LocalDateTime debut,
                                @Param("fin") LocalDateTime fin);
 
-    // Total montant par type global
     @Query("SELECT COALESCE(SUM(o.montant), 0) FROM OperationEntity o WHERE o.agent.id = :agentId AND o.type = :type")
     Double totalMontantParTypeGlobal(@Param("agentId") Long agentId,
                                      @Param("type") OperationEntity.TypeOperation type);
+
+    // Admin : totaux globaux toutes opérations
+    @Query("SELECT COALESCE(SUM(o.commission), 0) FROM OperationEntity o")
+    Double totalCommissionsAdmin();
+
+    @Query("SELECT COALESCE(SUM(o.montant), 0) FROM OperationEntity o")
+    Double totalMontantAdmin();
 }

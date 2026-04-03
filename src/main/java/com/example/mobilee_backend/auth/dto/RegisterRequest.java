@@ -26,4 +26,11 @@ public class RegisterRequest {
     private String confirmerMotDePasse;
 
     private String nomAgence;
+
+    // Nouveaux champs
+    private String nni;
+    private String adresse;
+    private String typePersonne;    // MORAL ou PHYSIQUE
+    private String statut;          // ACTIF, BLOQUE, FERME, SUSPENDU
+    private String typeOuverture;
 }

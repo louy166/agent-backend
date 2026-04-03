@@ -3,6 +3,7 @@ package com.example.mobilee_backend.auth.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "operations")
@@ -32,6 +33,12 @@ public class OperationEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(nullable = false, unique = true)
+    private String reference;
+
+    @Column(name = "telephone_client")
+    private String telephoneClient;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agent_id", nullable = false)
     private AgentEntity agent;
@@ -39,11 +46,18 @@ public class OperationEntity {
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) this.createdAt = LocalDateTime.now();
+        // Référence unique : OP-YYYYMMDD-UUID(8 chars)
+        if (this.reference == null) {
+            String date = java.time.format.DateTimeFormatter
+                    .ofPattern("yyyyMMdd").format(this.createdAt);
+            this.reference = "OP-" + date + "-" +
+                    UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        }
         // Calcul automatique commission
         if (this.type == TypeOperation.RETRAIT) {
-            this.commission = this.montant * 0.50; // 50% pour retrait
+            this.commission = this.montant * 0.50;
         } else {
-            this.commission = this.montant * 0.05; // 5% pour dépôt
+            this.commission = this.montant * 0.05;
         }
     }
 
