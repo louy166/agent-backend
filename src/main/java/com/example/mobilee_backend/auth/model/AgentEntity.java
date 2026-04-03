@@ -31,12 +31,7 @@ public class AgentEntity {
     @Column(name = "nom_agence")
     private String nomAgence;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
+    // ── Nouveaux champs ──────────────────────────────────────────────────────
 
     @Column(unique = true)
     private String nni;                     // Numéro National d'Identification
@@ -55,19 +50,26 @@ public class AgentEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type_ouverture")
-    private TypeOuverture typeOuverture;
+    private TypeOuverture typeOuverture;    // MOBILE ou WEB
+
+    // ── Champs existants ────────────────────────────────────────────────────
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        if (this.role == null) this.role = Role.AGENT;
+        if (this.role == null)   this.role   = Role.AGENT;
         if (this.statut == null) this.statut = Statut.ACTIF;
         if (this.createdAt == null) this.createdAt = LocalDateTime.now();
     }
 
-    public enum Role {
-        AGENT, ADMIN
-    }
+    // ── Enums ────────────────────────────────────────────────────────────────
 
+    public enum Role        { AGENT, ADMIN }
     public enum TypePersonne { MORAL, PHYSIQUE }
     public enum Statut       { ACTIF, BLOQUE, FERME, SUSPENDU }
     public enum TypeOuverture { MOBILE, WEB }

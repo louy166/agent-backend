@@ -17,27 +17,27 @@ public class OperationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String reference;               // référence unique auto-générée
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeOperation type; // RETRAIT ou DEPOT
+    private TypeOperation type;             // RETRAIT ou DEPOT
 
     @Column(nullable = false)
     private Double montant;
 
     @Column(nullable = false)
-    private Double commission; // calculée automatiquement
+    private Double commission;              // calculée automatiquement
 
     @Column(name = "nom_client")
     private String nomClient;
 
+    @Column(name = "telephone_client")
+    private String telephoneClient;         // nouveau champ
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(nullable = false, unique = true)
-    private String reference;
-
-    @Column(name = "telephone_client")
-    private String telephoneClient;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agent_id", nullable = false)
@@ -61,7 +61,5 @@ public class OperationEntity {
         }
     }
 
-    public enum TypeOperation {
-        RETRAIT, DEPOT
-    }
+    public enum TypeOperation { RETRAIT, DEPOT }
 }
