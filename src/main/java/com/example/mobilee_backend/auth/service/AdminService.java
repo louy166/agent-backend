@@ -2,6 +2,7 @@ package com.example.mobilee_backend.auth.service;
 
 import com.example.mobilee_backend.auth.dto.AdminAgentRequest;
 import com.example.mobilee_backend.auth.model.AgentEntity;
+import com.example.mobilee_backend.auth.model.OperationEntity;
 import com.example.mobilee_backend.auth.repository.AgentRepository;
 import com.example.mobilee_backend.auth.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;

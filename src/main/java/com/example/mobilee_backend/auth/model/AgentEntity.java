@@ -67,7 +67,7 @@ public class AgentEntity {
     public enum Role {
         AGENT, ADMIN
     }
-    public enum Role        { AGENT, ADMIN }
+
     public enum TypePersonne { MORAL, PHYSIQUE }
     public enum Statut       { ACTIF, BLOQUE, FERME, SUSPENDU }
     public enum TypeOuverture { MOBILE, WEB }
