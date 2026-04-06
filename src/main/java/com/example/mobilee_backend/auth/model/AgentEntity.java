@@ -10,11 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AgentEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AgentEntity { @Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
 
     @Column(nullable = false)
     private String nom;
