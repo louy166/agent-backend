@@ -7,7 +7,6 @@ import com.example.mobilee_backend.auth.repository.AgentRepository;
 import com.example.mobilee_backend.auth.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,39 +19,34 @@ public class DashboardService {
 
     private final AgentRepository agentRepository;
     private final OperationRepository operationRepository;
-
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public DashboardResponse getDashboard(Long agentId) {
-
-        // Récupérer l'agent
         AgentEntity agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new IllegalArgumentException("Agent introuvable"));
 
-        // Bornes de la journée
         LocalDateTime debutJour = LocalDate.now().atStartOfDay();
-        LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
+        LocalDateTime finJour   = debutJour.plusDays(1).minusSeconds(1);
 
-        // Statistiques
-        Double commissionsGlobal = operationRepository.totalCommissions(agentId);
+        Double commissionsGlobal     = operationRepository.totalCommissions(agentId);
         Double commissionsAujourdhui = operationRepository.totalCommissionsJour(agentId, debutJour, finJour);
-        Long opsAujourdhui = operationRepository.countByAgentIdAndCreatedAtBetween(agentId, debutJour, finJour);
-        Long opsTotal = operationRepository.countByAgentIdAndCreatedAtBetween(agentId,
-                LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.now());
+        Double montantGlobal         = operationRepository.totalMontant(agentId);
+        Double montantAujourdhui     = operationRepository.totalMontantJour(agentId, debutJour, finJour);
+        Long   opsAujourdhui         = operationRepository.countByAgentIdAndCreatedAtBetween(agentId, debutJour, finJour);
+        Long   opsTotal              = (long) operationRepository.findByAgentIdOrderByCreatedAtDesc(agentId).size();
 
-        // 5 dernières opérations
-        List<OperationEntity> operations = operationRepository
-                .findByAgentIdOrderByCreatedAtDesc(agentId)
-                .stream().limit(5).collect(Collectors.toList());
+        List<OperationEntity> ops = operationRepository
+                .findByAgentIdOrderByCreatedAtDesc(agentId).stream().limit(5).collect(Collectors.toList());
 
-        List<DashboardResponse.OperationDto> dernieres = operations.stream()
+        List<DashboardResponse.OperationDto> dernieres = ops.stream()
                 .map(op -> DashboardResponse.OperationDto.builder()
                         .id(op.getId())
+                        .reference(op.getReference())
                         .type(op.getType().name())
                         .montant(op.getMontant())
                         .commission(op.getCommission())
                         .nomClient(op.getNomClient())
+                        .telephoneClient(op.getTelephoneClient())
                         .date(op.getCreatedAt().format(FORMATTER))
                         .build())
                 .collect(Collectors.toList());
@@ -63,6 +57,8 @@ public class DashboardService {
                         .nomAgence(agent.getNomAgence())
                         .totalCommissionsGlobal(commissionsGlobal)
                         .totalCommissionsAujourdhui(commissionsAujourdhui)
+                        .totalMontantGlobal(montantGlobal)
+                        .totalMontantAujourdhui(montantAujourdhui)
                         .nombreOperationsAujourdhui(opsAujourdhui)
                         .nombreOperationsTotal(opsTotal)
                         .build())
