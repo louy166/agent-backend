@@ -3,10 +3,7 @@ package com.example.mobilee_backend.auth.dto;
 import lombok.*;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class HistoriqueResponse {
 
     private List<OperationDto> operations;
@@ -16,10 +13,7 @@ public class HistoriqueResponse {
     private Double totalDepots;
     private Double totalMontant;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
+    @Data @AllArgsConstructor @NoArgsConstructor @Builder
     public static class OperationDto {
         private Long   id;
         private String reference;

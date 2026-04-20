@@ -17,67 +17,53 @@ import java.util.stream.Collectors;
 public class HistoriqueService {
 
     private final OperationRepository operationRepository;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-    // ─── Toutes les opérations ────────────────────────────────────────────────
     public HistoriqueResponse getHistoriqueGlobal(Long agentId) {
-        List<OperationEntity> operations =
-                operationRepository.findByAgentIdOrderByCreatedAtDesc(agentId);
-
+        List<OperationEntity> ops = operationRepository.findByAgentIdOrderByCreatedAtDesc(agentId);
         Double totalCommissions = operationRepository.totalCommissions(agentId);
-        Double totalRetraits = operationRepository.totalMontantParTypeGlobal(
-                agentId, OperationEntity.TypeOperation.RETRAIT);
-        Double totalDepots = operationRepository.totalMontantParTypeGlobal(
-                agentId, OperationEntity.TypeOperation.DEPOT);
-
-        return buildResponse(operations, totalCommissions, totalRetraits, totalDepots);
+        Double totalMontant     = operationRepository.totalMontant(agentId);
+        Double totalRetraits    = operationRepository.totalMontantParTypeGlobal(agentId, OperationEntity.TypeOperation.RETRAIT);
+        Double totalDepots      = operationRepository.totalMontantParTypeGlobal(agentId, OperationEntity.TypeOperation.DEPOT);
+        return buildResponse(ops, totalCommissions, totalMontant, totalRetraits, totalDepots);
     }
 
-    // ─── Filtrer par jour ─────────────────────────────────────────────────────
     public HistoriqueResponse getHistoriqueJour(Long agentId, LocalDate date) {
         LocalDateTime debut = date.atStartOfDay();
-        LocalDateTime fin = debut.plusDays(1).minusSeconds(1);
+        LocalDateTime fin   = debut.plusDays(1).minusSeconds(1);
         return getHistoriquePeriode(agentId, debut, fin);
     }
 
-    // ─── Filtrer par mois ─────────────────────────────────────────────────────
     public HistoriqueResponse getHistoriqueMois(Long agentId, int annee, int mois) {
         LocalDateTime debut = LocalDate.of(annee, mois, 1).atStartOfDay();
-        LocalDateTime fin = debut.plusMonths(1).minusSeconds(1);
+        LocalDateTime fin   = debut.plusMonths(1).minusSeconds(1);
         return getHistoriquePeriode(agentId, debut, fin);
     }
 
-    // ─── Filtrer par période personnalisée ────────────────────────────────────
-    public HistoriqueResponse getHistoriquePeriode(Long agentId,
-                                                   LocalDateTime debut,
-                                                   LocalDateTime fin) {
-        List<OperationEntity> operations =
-                operationRepository.findByAgentIdAndCreatedAtBetweenOrderByCreatedAtDesc(
-                        agentId, debut, fin);
-
+    public HistoriqueResponse getHistoriquePeriode(Long agentId, LocalDateTime debut, LocalDateTime fin) {
+        List<OperationEntity> ops = operationRepository
+                .findByAgentIdAndCreatedAtBetweenOrderByCreatedAtDesc(agentId, debut, fin);
         Double totalCommissions = operationRepository.totalCommissionsJour(agentId, debut, fin);
-        Double totalRetraits = operationRepository.totalMontantParType(
-                agentId, OperationEntity.TypeOperation.RETRAIT, debut, fin);
-        Double totalDepots = operationRepository.totalMontantParType(
-                agentId, OperationEntity.TypeOperation.DEPOT, debut, fin);
-
-        return buildResponse(operations, totalCommissions, totalRetraits, totalDepots);
+        Double totalMontant     = operationRepository.totalMontantJour(agentId, debut, fin);
+        Double totalRetraits    = operationRepository.totalMontantParType(agentId, OperationEntity.TypeOperation.RETRAIT, debut, fin);
+        Double totalDepots      = operationRepository.totalMontantParType(agentId, OperationEntity.TypeOperation.DEPOT, debut, fin);
+        return buildResponse(ops, totalCommissions, totalMontant, totalRetraits, totalDepots);
     }
 
-    // ─── Helper ───────────────────────────────────────────────────────────────
-    private HistoriqueResponse buildResponse(List<OperationEntity> operations,
+    private HistoriqueResponse buildResponse(List<OperationEntity> ops,
                                              Double totalCommissions,
+                                             Double totalMontant,
                                              Double totalRetraits,
                                              Double totalDepots) {
-        List<HistoriqueResponse.OperationDto> dtos = operations.stream()
+        List<HistoriqueResponse.OperationDto> dtos = ops.stream()
                 .map(op -> HistoriqueResponse.OperationDto.builder()
                         .id(op.getId())
+                        .reference(op.getReference())
                         .type(op.getType().name())
                         .montant(op.getMontant())
                         .commission(op.getCommission())
                         .nomClient(op.getNomClient())
+                        .telephoneClient(op.getTelephoneClient())
                         .date(op.getCreatedAt().format(FORMATTER))
                         .build())
                 .collect(Collectors.toList());
@@ -85,7 +71,8 @@ public class HistoriqueService {
         return HistoriqueResponse.builder()
                 .operations(dtos)
                 .totalCommissions(totalCommissions)
-                .totalOperations((long) operations.size())
+                .totalMontant(totalMontant)
+                .totalOperations((long) ops.size())
                 .totalRetraits(totalRetraits)
                 .totalDepots(totalDepots)
                 .build();
