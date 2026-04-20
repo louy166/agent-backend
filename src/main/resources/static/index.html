@@ -240,13 +240,12 @@
 </head>
 <body>
 
-<!-- ══ PAGE LOGIN ══ -->
 <div class="login-page" id="login-page">
     <div class="login-card">
         <div class="login-logo">
             <div class="login-logo-icon">M</div>
             <div>
-                <div class="login-logo-text">Masrvi</div>
+                <div class="login-logo-text">agence Masrvi</div>
                 <div class="login-logo-sub">Espace Administration</div>
             </div>
         </div>
@@ -283,7 +282,6 @@
     </div>
 </div>
 
-<!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
     <div class="sidebar-logo">
         <div class="logo-icon">M</div>
@@ -306,7 +304,6 @@
     <div class="sidebar-footer">Masrvi Admin</div>
 </aside>
 
-<!-- ══ MAIN ══ -->
 <main class="main">
     <header class="topbar">
         <span class="topbar-title" id="topbar-title">Tableau de bord</span>
@@ -322,7 +319,6 @@
 
     <div class="content">
 
-        <!-- ── Dashboard ── -->
         <div id="view-dashboard" class="view active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -368,7 +364,6 @@
             </div>
         </div>
 
-        <!-- ── Agents ── -->
         <div id="view-agents" class="view">
             <div class="page-header">
                 <h2>Gestion des agents</h2>
@@ -387,7 +382,7 @@
                         <option value="ACTIF">Actif</option>
                         <option value="BLOQUE">Bloqué</option>
                         <option value="FERME">Fermé</option>
-                        <option value="SUSPENDU">Suspendu</option>
+                        <option value="SUSPENDU">Suspunedu</option>
                     </select>
                     <select id="filter-type" onchange="filterAgents()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:#f9fafb">
                         <option value="">Tous les types</option>
@@ -410,7 +405,6 @@
             </div>
         </div>
 
-        <!-- ── Transactions ── -->
         <div id="view-operations" class="view">
             <div class="page-header">
                 <h2>Toutes les transactions</h2>
@@ -445,7 +439,6 @@
     </div>
 </main>
 
-<!-- ══ MODAL AGENT ══ -->
 <div class="modal-overlay hidden" id="agent-modal">
     <div class="modal">
         <div class="modal-header">
@@ -525,7 +518,6 @@
     </div>
 </div>
 
-<!-- ══ MODAL CONFIRM SUPPRESSION ══ -->
 <div class="modal-overlay hidden" id="confirm-modal">
     <div class="modal" style="max-width:420px">
         <div class="confirm-body">
@@ -544,11 +536,11 @@
     </div>
 </div>
 
-<!-- ══ TOAST ══ -->
 <div class="toast" id="toast"></div>
 
 <script>
-    const API = 'https://agent-backend-tt6m.onrender.com/api';
+    // Chemin relatif idéal pour Spring Boot servissant le fichier statique
+    const API = '/api';
 
     let allAgents     = [];
     let allOperations = [];
@@ -678,15 +670,15 @@
             const tbody = document.getElementById('recent-ops-body');
             if (!ops.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>'; return; }
             tbody.innerHTML = ops.slice(0, 10).map(op => `
-            <tr>
-                <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
-                <td>${badgeType(op.type)}</td>
-                <td><strong>${Number(op.montant).toFixed(2)}</strong></td>
-                <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)}</td>
-                <td>${op.agentNom}</td>
-                <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
-                <td style="color:var(--muted);font-size:12px">${op.date}</td>
-            </tr>`).join('');
+                <tr>
+                    <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
+                    <td>${badgeType(op.type)}</td>
+                    <td><strong>${Number(op.montant).toFixed(2)}</strong></td>
+                    <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)}</td>
+                    <td>${op.agentNom}</td>
+                    <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
+                    <td style="color:var(--muted);font-size:12px">${op.date}</td>
+                </tr>`).join('');
         } catch(e) { toast(e.message, 'error'); }
     }
 
@@ -700,31 +692,31 @@
         const tbody = document.getElementById('agents-body');
         if (!agents.length) { tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:24px">Aucun agent</td></tr>'; return; }
         tbody.innerHTML = agents.map(a => `
-        <tr>
-            <td style="color:var(--muted);font-size:12px">#${a.id}</td>
-            <td><strong>${a.nom}</strong></td>
-            <td style="font-size:12px">${a.nni || '<span style="color:var(--muted)">—</span>'}</td>
-            <td>${a.telephone}</td>
-            <td style="font-size:12px">${a.email}</td>
-            <td style="font-size:12px">${a.nomAgence || '<span style="color:var(--muted)">—</span>'}</td>
-            <td>${a.typePersonne ? badgeTypePersonne(a.typePersonne) : '—'}</td>
-            <td>${a.typeOuverture ? badgeOuverture(a.typeOuverture) : '—'}</td>
-            <td>${badgeStatut(a.statut)}</td>
-            <td style="font-size:11px;color:var(--muted)">${a.createdAt}</td>
-            <td>
-                <div style="display:flex;gap:6px">
-                    <button class="btn btn-ghost btn-sm" onclick="openAgentModal(${a.id})" title="Modifier">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="btn btn-sm" style="background:#fef3c7;color:#92400e" onclick="quickStatut(${a.id}, '${a.statut}')" title="Changer statut">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="askDelete(${a.id})" title="Supprimer">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </td>
-        </tr>`).join('');
+            <tr>
+                <td style="color:var(--muted);font-size:12px">#${a.id}</td>
+                <td><strong>${a.nom}</strong></td>
+                <td style="font-size:12px">${a.nni || '<span style="color:var(--muted)">—</span>'}</td>
+                <td>${a.telephone}</td>
+                <td style="font-size:12px">${a.email}</td>
+                <td style="font-size:12px">${a.nomAgence || '<span style="color:var(--muted)">—</span>'}</td>
+                <td>${a.typePersonne ? badgeTypePersonne(a.typePersonne) : '—'}</td>
+                <td>${a.typeOuverture ? badgeOuverture(a.typeOuverture) : '—'}</td>
+                <td>${badgeStatut(a.statut)}</td>
+                <td style="font-size:11px;color:var(--muted)">${a.createdAt}</td>
+                <td>
+                    <div style="display:flex;gap:6px">
+                        <button class="btn btn-ghost btn-sm" onclick="openAgentModal(${a.id})" title="Modifier">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn btn-sm" style="background:#fef3c7;color:#92400e" onclick="quickStatut(${a.id}, '${a.statut}')" title="Changer statut">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="askDelete(${a.id})" title="Supprimer">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`).join('');
     }
 
     function filterAgents() {
@@ -820,16 +812,16 @@
         const tbody = document.getElementById('operations-body');
         if (!ops.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>'; return; }
         tbody.innerHTML = ops.map(op => `
-        <tr>
-            <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
-            <td>${badgeType(op.type)}</td>
-            <td><strong>${Number(op.montant).toFixed(2)} MRU</strong></td>
-            <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)} MRU</td>
-            <td>${op.agentNom}</td>
-            <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
-            <td style="font-size:12px">${op.telephoneClient || '<span style="color:var(--muted)">—</span>'}</td>
-            <td style="color:var(--muted);font-size:12px">${op.date}</td>
-        </tr>`).join('');
+            <tr>
+                <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
+                <td>${badgeType(op.type)}</td>
+                <td><strong>${Number(op.montant).toFixed(2)} MRU</strong></td>
+                <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)} MRU</td>
+                <td>${op.agentNom}</td>
+                <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
+                <td style="font-size:12px">${op.telephoneClient || '<span style="color:var(--muted)">—</span>'}</td>
+                <td style="color:var(--muted);font-size:12px">${op.date}</td>
+            </tr>`).join('');
     }
 
     function filterOperations() {
