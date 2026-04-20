@@ -24,6 +24,59 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
+        /* ── Page Login ── */
+        .login-page {
+            position: fixed; inset: 0;
+            background: linear-gradient(135deg, #1a2e27 0%, #0d1f1a 100%);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; padding: 20px;
+        }
+        .login-page.hidden { display: none; }
+        .login-card {
+            background: #fff; border-radius: 24px; padding: 40px;
+            width: 100%; max-width: 420px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+        }
+        .login-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+        .login-logo-icon {
+            width: 52px; height: 52px; background: var(--primary);
+            border-radius: 14px; display: flex; align-items: center;
+            justify-content: center; font-size: 22px; font-weight: 800; color: #fff;
+        }
+        .login-logo-text { font-size: 20px; font-weight: 800; color: var(--text); }
+        .login-logo-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .login-title    { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        .login-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+        .login-field    { margin-bottom: 16px; }
+        .login-label    { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+        .login-input-wrap { position: relative; }
+        .login-input {
+            width: 100%; padding: 12px 14px 12px 44px;
+            border: 1.5px solid var(--border); border-radius: 12px;
+            font-size: 15px; background: #f9fafb; color: var(--text);
+            outline: none; transition: border .15s;
+        }
+        .login-input:focus { border-color: var(--primary); background: #fff; }
+        .login-input-icon {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--muted); font-size: 15px; pointer-events: none;
+        }
+        .login-btn {
+            width: 100%; padding: 13px; background: var(--primary);
+            color: #fff; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            margin-top: 8px; transition: background .15s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .login-btn:hover    { background: var(--primary-dark); }
+        .login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .login-error {
+            background: #fee2e2; color: #991b1b; border-radius: 10px;
+            padding: 10px 14px; font-size: 13px; margin-bottom: 16px;
+            display: none; align-items: center; gap: 8px; border-left: 3px solid var(--danger);
+        }
+        .login-error.show { display: flex; }
+
         /* ── Sidebar ── */
         .sidebar {
             width: var(--sidebar-w); background: #1a2e27; color: #fff;
@@ -73,22 +126,16 @@
         .content { padding: 28px; flex: 1; }
 
         /* ── Cards ── */
-        .card {
-            background: var(--card); border-radius: 16px; padding: 20px;
-            border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04);
-        }
+        .card { background: var(--card); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
         .card-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
 
         /* ── Stats Grid ── */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-        .stat-card {
-            background: var(--card); border-radius: 16px; padding: 20px;
-            border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;
-        }
-        .stat-icon {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; font-size: 18px;
-        }
+        .stat-card { background: var(--card); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+        .stat-icon { width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .stat-value { font-size: 22px; font-weight: 800; }
         .stat-label { font-size: 12px; color: var(--muted); }
 
@@ -102,27 +149,23 @@
         tr:hover td { background: #fafafa; }
 
         /* ── Badges ── */
-        .badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-        }
-        .badge-actif     { background: #d1fae5; color: #065f46; }
-        .badge-bloque    { background: #fee2e2; color: #991b1b; }
-        .badge-ferme     { background: #f3f4f6; color: #374151; }
-        .badge-suspendu  { background: #fef3c7; color: #92400e; }
-        .badge-retrait   { background: #fee2e2; color: #991b1b; }
-        .badge-depot     { background: #d1fae5; color: #065f46; }
-        .badge-moral     { background: #ede9fe; color: #5b21b6; }
-        .badge-physique  { background: #e0f2fe; color: #0369a1; }
-        .badge-mobile    { background: #fce7f3; color: #9d174d; }
-        .badge-web       { background: #e0e7ff; color: #3730a3; }
+        .badge { display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .badge-actif    { background: #d1fae5; color: #065f46; }
+        .badge-bloque   { background: #fee2e2; color: #991b1b; }
+        .badge-ferme    { background: #f3f4f6; color: #374151; }
+        .badge-suspendu { background: #fef3c7; color: #92400e; }
+        .badge-retrait  { background: #fee2e2; color: #991b1b; }
+        .badge-depot    { background: #d1fae5; color: #065f46; }
+        .badge-moral    { background: #ede9fe; color: #5b21b6; }
+        .badge-physique { background: #e0f2fe; color: #0369a1; }
+        .badge-mobile   { background: #fce7f3; color: #9d174d; }
+        .badge-web      { background: #e0e7ff; color: #3730a3; }
 
         /* ── Buttons ── */
-        .btn {
-            display: inline-flex; align-items: center; gap: 6px;
+        .btn { display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 16px; border-radius: 10px; border: none;
-            cursor: pointer; font-size: 13px; font-weight: 600; transition: all .15s;
-        }
+            cursor: pointer; font-size: 13px; font-weight: 600; transition: all .15s; }
         .btn-primary  { background: var(--primary); color: #fff; }
         .btn-primary:hover  { background: var(--primary-dark); }
         .btn-danger   { background: var(--danger); color: #fff; }
@@ -134,20 +177,15 @@
         .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
 
         /* ── Modal ── */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,.45);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 999; padding: 20px;
-        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45);
+            display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
         .modal-overlay.hidden { display: none; }
-        .modal {
-            background: var(--card); border-radius: 20px; padding: 28px;
+        .modal { background: var(--card); border-radius: 20px; padding: 28px;
             width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
-        }
+            box-shadow: 0 20px 60px rgba(0,0,0,.2); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title  { font-size: 18px; font-weight: 800; }
-        .modal-close  { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); line-height: 1; }
+        .modal-close  { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--muted); line-height: 1; }
 
         /* ── Form ── */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -164,15 +202,12 @@
 
         /* ── Filters ── */
         .filters { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-        .search-input {
-            padding: 8px 14px 8px 36px; border: 1.5px solid var(--border);
-            border-radius: 10px; font-size: 13px; outline: none; background: #f9fafb;
-            width: 240px; transition: border .15s;
-        }
+        .search-input { padding: 8px 14px 8px 36px; border: 1.5px solid var(--border);
+            border-radius: 10px; font-size: 13px; outline: none; background: #f9fafb; width: 240px; transition: border .15s; }
         .search-input:focus { border-color: var(--primary); }
         .search-wrap { position: relative; }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            color: var(--muted); font-size: 14px; pointer-events: none; }
+            color: var(--muted); font-size: 13px; pointer-events: none; }
 
         /* ── Views ── */
         .view { display: none; }
@@ -180,17 +215,15 @@
 
         /* ── Confirm modal ── */
         .confirm-body { text-align: center; padding: 8px 0; }
-        .confirm-icon { font-size: 48px; margin-bottom: 12px; color: var(--danger); }
+        .confirm-icon { font-size: 44px; margin-bottom: 12px; color: var(--danger); }
         .confirm-text { color: var(--muted); font-size: 14px; margin-top: 6px; }
 
         /* ── Toast ── */
-        .toast {
-            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+        .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999;
             background: #1a2e27; color: #fff; padding: 12px 20px; border-radius: 12px;
             font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px;
             transform: translateY(80px); opacity: 0; transition: all .3s;
-            box-shadow: 0 8px 24px rgba(0,0,0,.2);
-        }
+            box-shadow: 0 8px 24px rgba(0,0,0,.2); }
         .toast.show { transform: translateY(0); opacity: 1; }
         .toast.success { border-left: 4px solid var(--primary); }
         .toast.error   { border-left: 4px solid var(--danger); }
@@ -207,6 +240,50 @@
 </head>
 <body>
 
+<!-- ══ PAGE LOGIN ══ -->
+<div class="login-page" id="login-page">
+    <div class="login-card">
+        <div class="login-logo">
+            <div class="login-logo-icon">M</div>
+            <div>
+                <div class="login-logo-text">Masrvi</div>
+                <div class="login-logo-sub">Espace Administration</div>
+            </div>
+        </div>
+        <h1 class="login-title">Connexion</h1>
+        <p class="login-subtitle">Entrez vos identifiants administrateur</p>
+
+        <div class="login-error" id="login-error">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span id="login-error-msg">Email ou mot de passe incorrect</span>
+        </div>
+
+        <div class="login-field">
+            <label class="login-label">Email</label>
+            <div class="login-input-wrap">
+                <i class="fa-solid fa-envelope login-input-icon"></i>
+                <input class="login-input" id="login-email" type="email"
+                       placeholder="admin@masriva.com" autocomplete="email">
+            </div>
+        </div>
+
+        <div class="login-field">
+            <label class="login-label">Mot de passe</label>
+            <div class="login-input-wrap">
+                <i class="fa-solid fa-lock login-input-icon"></i>
+                <input class="login-input" id="login-password" type="password"
+                       placeholder="••••••••" autocomplete="current-password">
+            </div>
+        </div>
+
+        <button class="login-btn" id="login-btn" onclick="handleLogin()">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Se connecter
+        </button>
+    </div>
+</div>
+
+<!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
     <div class="sidebar-logo">
         <div class="logo-icon">M</div>
@@ -216,60 +293,67 @@
         </div>
     </div>
     <nav class="sidebar-nav">
-        <button class="nav-item active" onclick="showView('dashboard')">
+        <button class="nav-item active" onclick="showView('dashboard', this)">
             <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span> Tableau de bord
         </button>
-        <button class="nav-item" onclick="showView('agents')">
+        <button class="nav-item" onclick="showView('agents', this)">
             <span class="nav-icon"><i class="fa-solid fa-users-gear"></i></span> Agents
         </button>
-        <button class="nav-item" onclick="showView('operations')">
+        <button class="nav-item" onclick="showView('operations', this)">
             <span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> Transactions
         </button>
     </nav>
-    <div class="sidebar-footer">Masrvi Admin </div>
+    <div class="sidebar-footer">Masrvi Admin</div>
 </aside>
 
+<!-- ══ MAIN ══ -->
 <main class="main">
     <header class="topbar">
         <span class="topbar-title" id="topbar-title">Tableau de bord</span>
         <div class="topbar-right">
-            <span class="admin-badge"><i class="fa-solid fa-user-shield"></i> Administrateur</span>
+            <span class="admin-badge" id="admin-name">
+                <i class="fa-solid fa-user-shield"></i> Administrateur
+            </span>
+            <button class="btn btn-ghost btn-sm" onclick="handleLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </button>
         </div>
     </header>
 
     <div class="content">
 
+        <!-- ── Dashboard ── -->
         <div id="view-dashboard" class="view active">
-            <div class="stats-grid" id="stats-grid">
+            <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#e8f8f2; color: #52BE9B;"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="stat-icon" style="background:#e8f8f2;color:#52BE9B"><i class="fa-solid fa-user-tie"></i></div>
                     <div class="stat-value" id="s-agents">—</div>
                     <div class="stat-label">Total agents</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#d1fae5; color: #059669;"><i class="fa-solid fa-user-check"></i></div>
+                    <div class="stat-icon" style="background:#d1fae5;color:#059669"><i class="fa-solid fa-user-check"></i></div>
                     <div class="stat-value" id="s-actifs">—</div>
                     <div class="stat-label">Agents actifs</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#ede9fe; color: #7c3aed;"><i class="fa-solid fa-receipt"></i></div>
+                    <div class="stat-icon" style="background:#ede9fe;color:#7c3aed"><i class="fa-solid fa-receipt"></i></div>
                     <div class="stat-value" id="s-ops">—</div>
                     <div class="stat-label">Total transactions</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#fef3c7; color: #d97706;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="stat-icon" style="background:#fef3c7;color:#d97706"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                     <div class="stat-value" id="s-comm">—</div>
                     <div class="stat-label">Total commissions (MRU)</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#e0e7ff; color: #4f46e5;"><i class="fa-solid fa-vault"></i></div>
+                    <div class="stat-icon" style="background:#e0e7ff;color:#4f46e5"><i class="fa-solid fa-vault"></i></div>
                     <div class="stat-value" id="s-montant">—</div>
                     <div class="stat-label">Volume total (MRU)</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">Dernières transactions</div>
+                <div class="card-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);margin-right:6px"></i>Dernières transactions</div>
                 <div class="table-wrap">
                     <table>
                         <thead><tr>
@@ -284,17 +368,19 @@
             </div>
         </div>
 
+        <!-- ── Agents ── -->
         <div id="view-agents" class="view">
             <div class="page-header">
                 <h2>Gestion des agents</h2>
-                <button class="btn btn-primary" onclick="openAgentModal()"><i class="fa-solid fa-plus"></i> Nouvel agent</button>
+                <button class="btn btn-primary" onclick="openAgentModal()">
+                    <i class="fa-solid fa-plus"></i> Nouvel agent
+                </button>
             </div>
             <div class="card">
                 <div class="filters">
                     <div class="search-wrap">
                         <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input class="search-input" id="agent-search" placeholder="Rechercher..."
-                               oninput="filterAgents()">
+                        <input class="search-input" id="agent-search" placeholder="Rechercher..." oninput="filterAgents()">
                     </div>
                     <select id="filter-statut" onchange="filterAgents()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:#f9fafb">
                         <option value="">Tous les statuts</option>
@@ -324,23 +410,21 @@
             </div>
         </div>
 
+        <!-- ── Transactions ── -->
         <div id="view-operations" class="view">
             <div class="page-header">
                 <h2>Toutes les transactions</h2>
-                <div style="display:flex;gap:8px;align-items:center">
-                    <select id="filter-op-type" onchange="filterOperations()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:#f9fafb">
-                        <option value="">Tous</option>
-                        <option value="RETRAIT">Retrait</option>
-                        <option value="DEPOT">Dépôt</option>
-                    </select>
-                </div>
+                <select id="filter-op-type" onchange="filterOperations()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:#f9fafb">
+                    <option value="">Tous</option>
+                    <option value="RETRAIT">Retrait</option>
+                    <option value="DEPOT">Dépôt</option>
+                </select>
             </div>
             <div class="card">
                 <div class="filters">
                     <div class="search-wrap">
                         <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input class="search-input" id="op-search" placeholder="Référence, agent, client..."
-                               oninput="filterOperations()">
+                        <input class="search-input" id="op-search" placeholder="Référence, agent, client..." oninput="filterOperations()">
                     </div>
                 </div>
                 <div class="table-wrap">
@@ -361,6 +445,7 @@
     </div>
 </main>
 
+<!-- ══ MODAL AGENT ══ -->
 <div class="modal-overlay hidden" id="agent-modal">
     <div class="modal">
         <div class="modal-header">
@@ -369,35 +454,35 @@
         </div>
         <div class="form-grid">
             <div class="form-group">
-                <label>Nom complet *</label>
+                <label><i class="fa-solid fa-user"></i> Nom complet *</label>
                 <input id="f-nom" placeholder="Ahmed Ould Mohamed">
             </div>
             <div class="form-group">
-                <label>NNI</label>
+                <label><i class="fa-solid fa-id-card"></i> NNI</label>
                 <input id="f-nni" placeholder="Numéro national d'identification">
             </div>
             <div class="form-group">
-                <label>Téléphone * (8 chiffres)</label>
+                <label><i class="fa-solid fa-phone"></i> Téléphone * (8 chiffres)</label>
                 <input id="f-telephone" placeholder="22123456" maxlength="8">
             </div>
             <div class="form-group">
-                <label>Email *</label>
+                <label><i class="fa-solid fa-envelope"></i> Email *</label>
                 <input id="f-email" type="email" placeholder="agent@example.com">
             </div>
             <div class="form-group">
-                <label>Mot de passe</label>
+                <label><i class="fa-solid fa-lock"></i> Mot de passe</label>
                 <input id="f-mdp" type="password" placeholder="Laisser vide pour garder">
             </div>
             <div class="form-group">
-                <label>Nom de l'agence</label>
+                <label><i class="fa-solid fa-building"></i> Nom de l'agence</label>
                 <input id="f-agence" placeholder="Masrvi Nouakchott">
             </div>
             <div class="form-group full">
-                <label>Adresse</label>
+                <label><i class="fa-solid fa-location-dot"></i> Adresse</label>
                 <input id="f-adresse" placeholder="Adresse complète">
             </div>
             <div class="form-group">
-                <label>Type de personne</label>
+                <label><i class="fa-solid fa-people-group"></i> Type de personne</label>
                 <select id="f-type-personne">
                     <option value="">-- Choisir --</option>
                     <option value="PHYSIQUE">Physique</option>
@@ -405,7 +490,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Type d'ouverture</label>
+                <label><i class="fa-solid fa-door-open"></i> Type d'ouverture</label>
                 <select id="f-type-ouverture">
                     <option value="">-- Choisir --</option>
                     <option value="MOBILE">Mobile</option>
@@ -413,7 +498,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Statut</label>
+                <label><i class="fa-solid fa-circle-dot"></i> Statut</label>
                 <select id="f-statut">
                     <option value="ACTIF">Actif</option>
                     <option value="BLOQUE">Bloqué</option>
@@ -422,7 +507,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Rôle</label>
+                <label><i class="fa-solid fa-shield-halved"></i> Rôle</label>
                 <select id="f-role">
                     <option value="AGENT">Agent</option>
                     <option value="ADMIN">Admin</option>
@@ -430,12 +515,17 @@
             </div>
         </div>
         <div class="form-actions">
-            <button class="btn btn-ghost" onclick="closeModal('agent-modal')">Annuler</button>
-            <button class="btn btn-primary" onclick="saveAgent()"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+            <button class="btn btn-ghost" onclick="closeModal('agent-modal')">
+                <i class="fa-solid fa-xmark"></i> Annuler
+            </button>
+            <button class="btn btn-primary" onclick="saveAgent()">
+                <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+            </button>
         </div>
     </div>
 </div>
 
+<!-- ══ MODAL CONFIRM SUPPRESSION ══ -->
 <div class="modal-overlay hidden" id="confirm-modal">
     <div class="modal" style="max-width:420px">
         <div class="confirm-body">
@@ -444,12 +534,17 @@
             <div class="confirm-text">Cette action est irréversible. Toutes les transactions liées seront conservées.</div>
         </div>
         <div class="form-actions" style="justify-content:center;margin-top:16px">
-            <button class="btn btn-ghost" onclick="closeModal('confirm-modal')">Annuler</button>
-            <button class="btn btn-danger" onclick="confirmDelete()"><i class="fa-solid fa-trash"></i> Supprimer</button>
+            <button class="btn btn-ghost" onclick="closeModal('confirm-modal')">
+                <i class="fa-solid fa-xmark"></i> Annuler
+            </button>
+            <button class="btn btn-danger" onclick="confirmDelete()">
+                <i class="fa-solid fa-trash"></i> Supprimer
+            </button>
         </div>
     </div>
 </div>
 
+<!-- ══ TOAST ══ -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -459,19 +554,87 @@
     let allOperations = [];
     let editingId     = null;
     let deletingId    = null;
+    let currentAdmin  = null;
+
+    // ── Login ─────────────────────────────────────────────────────────────────────
+    async function handleLogin() {
+        const email    = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const btn      = document.getElementById('login-btn');
+        const errBox   = document.getElementById('login-error');
+        const errMsg   = document.getElementById('login-error-msg');
+
+        if (!email || !password) {
+            errMsg.textContent = 'Veuillez remplir tous les champs';
+            errBox.classList.add('show'); return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connexion...';
+        errBox.classList.remove('show');
+
+        try {
+            const res  = await fetch(`${API}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, motDePasse: password }),
+            });
+            const json = await res.json();
+
+            if (!res.ok) throw new Error(json.erreur || 'Identifiants incorrects');
+            if (json.agent.role !== 'ADMIN') throw new Error('Accès refusé — compte non administrateur');
+
+            currentAdmin = json.agent;
+            sessionStorage.setItem('admin', JSON.stringify(currentAdmin));
+            document.getElementById('admin-name').innerHTML =
+                `<i class="fa-solid fa-user-shield"></i> ${currentAdmin.nom}`;
+            document.getElementById('login-page').classList.add('hidden');
+            loadStats();
+            loadRecentOps();
+
+        } catch (e) {
+            errMsg.textContent = e.message;
+            errBox.classList.add('show');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Se connecter';
+        }
+    }
+
+    function handleLogout() {
+        if (!confirm('Voulez-vous vraiment vous déconnecter ?')) return;
+        sessionStorage.removeItem('admin');
+        currentAdmin = null;
+        document.getElementById('login-email').value    = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-page').classList.remove('hidden');
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !document.getElementById('login-page').classList.contains('hidden'))
+            handleLogin();
+    });
+
+    // Vérifier session existante
+    const savedAdmin = sessionStorage.getItem('admin');
+    if (savedAdmin) {
+        currentAdmin = JSON.parse(savedAdmin);
+        document.getElementById('admin-name').innerHTML =
+            `<i class="fa-solid fa-user-shield"></i> ${currentAdmin.nom}`;
+        document.getElementById('login-page').classList.add('hidden');
+        loadStats();
+        loadRecentOps();
+    }
 
     // ── Navigation ────────────────────────────────────────────────────────────────
-    function showView(name) {
+    function showView(name, el) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById('view-' + name).classList.add('active');
-        // Ajout d'une sécurité pour l'event
-        if(window.event) {
-            event.currentTarget.classList.add('active');
-        }
+        if (el) el.classList.add('active');
         const titles = { dashboard: 'Tableau de bord', agents: 'Gestion des agents', operations: 'Transactions' };
         document.getElementById('topbar-title').textContent = titles[name] || name;
-        if (name === 'dashboard')  loadStats(), loadRecentOps();
+        if (name === 'dashboard')  { loadStats(); loadRecentOps(); }
         if (name === 'agents')     loadAgents();
         if (name === 'operations') loadOperations();
     }
@@ -479,7 +642,9 @@
     // ── Toast ─────────────────────────────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const t = document.getElementById('toast');
-        const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
+        const icon = type === 'success'
+            ? '<i class="fa-solid fa-circle-check"></i>'
+            : '<i class="fa-solid fa-circle-exclamation"></i>';
         t.innerHTML = `${icon} <span>${msg}</span>`;
         t.className = 'toast show ' + type;
         setTimeout(() => t.classList.remove('show'), 3000);
@@ -488,8 +653,7 @@
     // ── API helper ────────────────────────────────────────────────────────────────
     async function api(path, opts = {}) {
         const res = await fetch(API + path, {
-            headers: { 'Content-Type': 'application/json' },
-            ...opts,
+            headers: { 'Content-Type': 'application/json' }, ...opts,
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(json.erreur || 'Erreur serveur');
@@ -511,56 +675,56 @@
     async function loadRecentOps() {
         try {
             const ops = await api('/admin/operations');
-            const recent = ops.slice(0, 10);
             const tbody = document.getElementById('recent-ops-body');
-            if (!recent.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>'; return; }
-            tbody.innerHTML = recent.map(op => `
-      <tr>
-        <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference}</code></td>
-        <td>${badgeType(op.type)}</td>
-        <td><strong>${Number(op.montant).toFixed(2)}</strong></td>
-        <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)}</td>
-        <td>${op.agentNom}</td>
-        <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
-        <td style="color:var(--muted);font-size:12px">${op.date}</td>
-      </tr>`).join('');
+            if (!ops.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>'; return; }
+            tbody.innerHTML = ops.slice(0, 10).map(op => `
+            <tr>
+                <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
+                <td>${badgeType(op.type)}</td>
+                <td><strong>${Number(op.montant).toFixed(2)}</strong></td>
+                <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)}</td>
+                <td>${op.agentNom}</td>
+                <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
+                <td style="color:var(--muted);font-size:12px">${op.date}</td>
+            </tr>`).join('');
         } catch(e) { toast(e.message, 'error'); }
     }
 
     // ── Agents ────────────────────────────────────────────────────────────────────
     async function loadAgents() {
-        try {
-            allAgents = await api('/admin/agents');
-            renderAgents(allAgents);
-        } catch(e) { toast(e.message, 'error'); }
+        try { allAgents = await api('/admin/agents'); renderAgents(allAgents); }
+        catch(e) { toast(e.message, 'error'); }
     }
 
     function renderAgents(agents) {
         const tbody = document.getElementById('agents-body');
-        if (!agents.length) {
-            tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:24px">Aucun agent</td></tr>';
-            return;
-        }
+        if (!agents.length) { tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:24px">Aucun agent</td></tr>'; return; }
         tbody.innerHTML = agents.map(a => `
-    <tr>
-      <td style="color:var(--muted);font-size:12px">#${a.id}</td>
-      <td><strong>${a.nom}</strong></td>
-      <td style="font-size:12px">${a.nni || '<span style="color:var(--muted)">—</span>'}</td>
-      <td>${a.telephone}</td>
-      <td style="font-size:12px">${a.email}</td>
-      <td style="font-size:12px">${a.nomAgence || '<span style="color:var(--muted)">—</span>'}</td>
-      <td>${a.typePersonne ? badgeTypePersonne(a.typePersonne) : '—'}</td>
-      <td>${a.typeOuverture ? badgeOuverture(a.typeOuverture) : '—'}</td>
-      <td>${badgeStatut(a.statut)}</td>
-      <td style="font-size:11px;color:var(--muted)">${a.createdAt}</td>
-      <td>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm" onclick="openAgentModal(${a.id})" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button class="btn btn-sm" style="background:#fef3c7;color:#92400e" onclick="quickStatut(${a.id}, '${a.statut}')" title="Changer statut"><i class="fa-solid fa-arrows-rotate"></i></button>
-          <button class="btn btn-danger btn-sm" onclick="askDelete(${a.id})" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
+        <tr>
+            <td style="color:var(--muted);font-size:12px">#${a.id}</td>
+            <td><strong>${a.nom}</strong></td>
+            <td style="font-size:12px">${a.nni || '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${a.telephone}</td>
+            <td style="font-size:12px">${a.email}</td>
+            <td style="font-size:12px">${a.nomAgence || '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${a.typePersonne ? badgeTypePersonne(a.typePersonne) : '—'}</td>
+            <td>${a.typeOuverture ? badgeOuverture(a.typeOuverture) : '—'}</td>
+            <td>${badgeStatut(a.statut)}</td>
+            <td style="font-size:11px;color:var(--muted)">${a.createdAt}</td>
+            <td>
+                <div style="display:flex;gap:6px">
+                    <button class="btn btn-ghost btn-sm" onclick="openAgentModal(${a.id})" title="Modifier">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn btn-sm" style="background:#fef3c7;color:#92400e" onclick="quickStatut(${a.id}, '${a.statut}')" title="Changer statut">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="askDelete(${a.id})" title="Supprimer">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>`).join('');
     }
 
     function filterAgents() {
@@ -568,36 +732,32 @@
         const statut = document.getElementById('filter-statut').value;
         const type   = document.getElementById('filter-type').value;
         renderAgents(allAgents.filter(a => {
-            const matchQ = !q || [a.nom, a.email, a.telephone, a.nni, a.nomAgence]
-                .some(v => v && v.toLowerCase().includes(q));
-            const matchS = !statut || a.statut === statut;
-            const matchT = !type   || a.typePersonne === type;
-            return matchQ && matchS && matchT;
+            const matchQ = !q || [a.nom, a.email, a.telephone, a.nni, a.nomAgence].some(v => v && v.toLowerCase().includes(q));
+            return matchQ && (!statut || a.statut === statut) && (!type || a.typePersonne === type);
         }));
     }
 
     // ── Modal agent ───────────────────────────────────────────────────────────────
     function openAgentModal(id = null) {
         editingId = id;
-        document.getElementById('modal-agent-title').textContent = id ? 'Modifier l\'agent' : 'Nouvel agent';
-        ['nom','nni','telephone','email','mdp','agence','adresse'].forEach(k =>
-            document.getElementById('f-' + k).value = '');
-        ['type-personne','type-ouverture','statut','role'].forEach(k =>
-            document.getElementById('f-' + k).value = k === 'statut' ? 'ACTIF' : k === 'role' ? 'AGENT' : '');
-
+        document.getElementById('modal-agent-title').textContent = id ? "Modifier l'agent" : 'Nouvel agent';
+        ['nom','nni','telephone','email','mdp','agence','adresse'].forEach(k => document.getElementById('f-' + k).value = '');
+        ['type-personne','type-ouverture'].forEach(k => document.getElementById('f-' + k).value = '');
+        document.getElementById('f-statut').value = 'ACTIF';
+        document.getElementById('f-role').value   = 'AGENT';
         if (id) {
             const a = allAgents.find(x => x.id === id);
             if (a) {
-                document.getElementById('f-nom').value          = a.nom          || '';
-                document.getElementById('f-nni').value          = a.nni          || '';
-                document.getElementById('f-telephone').value    = a.telephone    || '';
-                document.getElementById('f-email').value        = a.email        || '';
-                document.getElementById('f-agence').value       = a.nomAgence    || '';
-                document.getElementById('f-adresse').value      = a.adresse      || '';
-                document.getElementById('f-type-personne').value  = a.typePersonne  || '';
-                document.getElementById('f-type-ouverture').value = a.typeOuverture || '';
-                document.getElementById('f-statut').value       = a.statut       || 'ACTIF';
-                document.getElementById('f-role').value         = a.role         || 'AGENT';
+                document.getElementById('f-nom').value           = a.nom          || '';
+                document.getElementById('f-nni').value           = a.nni          || '';
+                document.getElementById('f-telephone').value     = a.telephone    || '';
+                document.getElementById('f-email').value         = a.email        || '';
+                document.getElementById('f-agence').value        = a.nomAgence    || '';
+                document.getElementById('f-adresse').value       = a.adresse      || '';
+                document.getElementById('f-type-personne').value = a.typePersonne  || '';
+                document.getElementById('f-type-ouverture').value= a.typeOuverture || '';
+                document.getElementById('f-statut').value        = a.statut       || 'ACTIF';
+                document.getElementById('f-role').value          = a.role         || 'AGENT';
             }
         }
         document.getElementById('agent-modal').classList.remove('hidden');
@@ -605,23 +765,19 @@
 
     async function saveAgent() {
         const body = {
-            nom:           document.getElementById('f-nom').value.trim(),
-            nni:           document.getElementById('f-nni').value.trim(),
-            telephone:     document.getElementById('f-telephone').value.trim(),
-            email:         document.getElementById('f-email').value.trim(),
-            motDePasse:    document.getElementById('f-mdp').value,
-            nomAgence:     document.getElementById('f-agence').value.trim(),
-            adresse:       document.getElementById('f-adresse').value.trim(),
-            typePersonne:  document.getElementById('f-type-personne').value,
+            nom: document.getElementById('f-nom').value.trim(),
+            nni: document.getElementById('f-nni').value.trim(),
+            telephone: document.getElementById('f-telephone').value.trim(),
+            email: document.getElementById('f-email').value.trim(),
+            motDePasse: document.getElementById('f-mdp').value,
+            nomAgence: document.getElementById('f-agence').value.trim(),
+            adresse: document.getElementById('f-adresse').value.trim(),
+            typePersonne: document.getElementById('f-type-personne').value,
             typeOuverture: document.getElementById('f-type-ouverture').value,
-            statut:        document.getElementById('f-statut').value,
-            role:          document.getElementById('f-role').value,
+            statut: document.getElementById('f-statut').value,
+            role: document.getElementById('f-role').value,
         };
-
-        if (!body.nom || !body.telephone || !body.email) {
-            toast('Nom, téléphone et email sont obligatoires', 'error'); return;
-        }
-
+        if (!body.nom || !body.telephone || !body.email) { toast('Nom, téléphone et email sont obligatoires', 'error'); return; }
         try {
             if (editingId) {
                 await api('/admin/agents/' + editingId, { method: 'PUT', body: JSON.stringify(body) });
@@ -635,22 +791,16 @@
         } catch(e) { toast(e.message, 'error'); }
     }
 
-    // Changer statut rapide
     function quickStatut(id, currentStatut) {
         const statuts = ['ACTIF','BLOQUE','SUSPENDU','FERME'];
         const next = statuts[(statuts.indexOf(currentStatut) + 1) % statuts.length];
         if (!confirm(`Changer le statut vers "${next}" ?`)) return;
-        api('/admin/agents/' + id + '/statut', {
-            method: 'PATCH', body: JSON.stringify({ statut: next })
-        }).then(() => { toast('Statut modifié'); loadAgents(); })
+        api('/admin/agents/' + id + '/statut', { method: 'PATCH', body: JSON.stringify({ statut: next }) })
+            .then(() => { toast('Statut modifié'); loadAgents(); })
             .catch(e => toast(e.message, 'error'));
     }
 
-    // Supprimer
-    function askDelete(id) {
-        deletingId = id;
-        document.getElementById('confirm-modal').classList.remove('hidden');
-    }
+    function askDelete(id) { deletingId = id; document.getElementById('confirm-modal').classList.remove('hidden'); }
     async function confirmDelete() {
         try {
             await api('/admin/agents/' + deletingId, { method: 'DELETE' });
@@ -662,39 +812,32 @@
 
     // ── Opérations ────────────────────────────────────────────────────────────────
     async function loadOperations() {
-        try {
-            allOperations = await api('/admin/operations');
-            renderOperations(allOperations);
-        } catch(e) { toast(e.message, 'error'); }
+        try { allOperations = await api('/admin/operations'); renderOperations(allOperations); }
+        catch(e) { toast(e.message, 'error'); }
     }
 
     function renderOperations(ops) {
         const tbody = document.getElementById('operations-body');
-        if (!ops.length) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>';
-            return;
-        }
+        if (!ops.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune transaction</td></tr>'; return; }
         tbody.innerHTML = ops.map(op => `
-    <tr>
-      <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference}</code></td>
-      <td>${badgeType(op.type)}</td>
-      <td><strong>${Number(op.montant).toFixed(2)} MRU</strong></td>
-      <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)} MRU</td>
-      <td>${op.agentNom}</td>
-      <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
-      <td style="font-size:12px">${op.telephoneClient || '<span style="color:var(--muted)">—</span>'}</td>
-      <td style="color:var(--muted);font-size:12px">${op.date}</td>
-    </tr>`).join('');
+        <tr>
+            <td><code style="font-size:11px;background:#f3f4f6;padding:2px 6px;border-radius:4px">${op.reference || '—'}</code></td>
+            <td>${badgeType(op.type)}</td>
+            <td><strong>${Number(op.montant).toFixed(2)} MRU</strong></td>
+            <td style="color:var(--primary);font-weight:700">+${Number(op.commission).toFixed(2)} MRU</td>
+            <td>${op.agentNom}</td>
+            <td>${op.nomClient || '<span style="color:var(--muted)">—</span>'}</td>
+            <td style="font-size:12px">${op.telephoneClient || '<span style="color:var(--muted)">—</span>'}</td>
+            <td style="color:var(--muted);font-size:12px">${op.date}</td>
+        </tr>`).join('');
     }
 
     function filterOperations() {
         const q    = document.getElementById('op-search').value.toLowerCase();
         const type = document.getElementById('filter-op-type').value;
         renderOperations(allOperations.filter(op => {
-            const matchQ = !q || [op.reference, op.agentNom, op.nomClient, op.telephoneClient]
-                .some(v => v && v.toLowerCase().includes(q));
-            const matchT = !type || op.type === type;
-            return matchQ && matchT;
+            const matchQ = !q || [op.reference, op.agentNom, op.nomClient, op.telephoneClient].some(v => v && v.toLowerCase().includes(q));
+            return matchQ && (!type || op.type === type);
         }));
     }
 
@@ -703,11 +846,11 @@
 
     // ── Badges ────────────────────────────────────────────────────────────────────
     function badgeStatut(s) {
-        const map = { ACTIF:'badge-actif', BLOQUE:'badge-bloque', FERME:'badge-ferme', SUSPENDU:'badge-suspendu' };
+        const map   = { ACTIF:'badge-actif', BLOQUE:'badge-bloque', FERME:'badge-ferme', SUSPENDU:'badge-suspendu' };
         const icons = {
-            ACTIF: '<i class="fa-solid fa-circle-check"></i>',
-            BLOQUE: '<i class="fa-solid fa-circle-xmark"></i>',
-            FERME: '<i class="fa-solid fa-door-closed"></i>',
+            ACTIF:    '<i class="fa-solid fa-circle-check"></i>',
+            BLOQUE:   '<i class="fa-solid fa-circle-xmark"></i>',
+            FERME:    '<i class="fa-solid fa-door-closed"></i>',
             SUSPENDU: '<i class="fa-solid fa-triangle-exclamation"></i>'
         };
         return `<span class="badge ${map[s]||'badge-ferme'}">${icons[s]||''} ${s||'—'}</span>`;
@@ -732,10 +875,6 @@
     document.querySelectorAll('.modal-overlay').forEach(o => {
         o.addEventListener('click', e => { if (e.target === o) o.classList.add('hidden'); });
     });
-
-    // ── Init ──────────────────────────────────────────────────────────────────────
-    loadStats();
-    loadRecentOps();
 </script>
 </body>
 </html>
