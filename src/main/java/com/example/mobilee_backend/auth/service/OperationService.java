@@ -8,7 +8,6 @@ import com.example.mobilee_backend.auth.repository.AgentRepository;
 import com.example.mobilee_backend.auth.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -23,7 +22,6 @@ public class OperationService {
 
     public OperationResponse creerOperation(OperationRequest request) {
 
-        // Vérifier le type
         OperationEntity.TypeOperation type;
         try {
             type = OperationEntity.TypeOperation.valueOf(request.getType().toUpperCase());
@@ -31,15 +29,14 @@ public class OperationService {
             throw new IllegalArgumentException("Type invalide. Utilisez RETRAIT ou DEPOT");
         }
 
-        // Récupérer l'agent
         AgentEntity agent = agentRepository.findById(request.getAgentId())
                 .orElseThrow(() -> new IllegalArgumentException("Agent introuvable"));
 
-        // Créer l'opération (commission calculée automatiquement via @PrePersist)
         OperationEntity operation = OperationEntity.builder()
                 .type(type)
                 .montant(request.getMontant())
                 .nomClient(request.getNomClient())
+                .telephoneClient(request.getTelephoneClient())
                 .agent(agent)
                 .build();
 
@@ -47,10 +44,12 @@ public class OperationService {
 
         return OperationResponse.builder()
                 .id(saved.getId())
+                .reference(saved.getReference())
                 .type(saved.getType().name())
                 .montant(saved.getMontant())
                 .commission(saved.getCommission())
                 .nomClient(saved.getNomClient())
+                .telephoneClient(saved.getTelephoneClient())
                 .date(saved.getCreatedAt().format(FORMATTER))
                 .message("Opération enregistrée avec succès")
                 .build();

@@ -8,10 +8,12 @@ import lombok.*;
 @Builder
 public class OperationResponse {
     private Long id;
+    private String reference;
     private String type;
     private Double montant;
     private Double commission;
     private String nomClient;
+    private String telephoneClient;
     private String date;
     private String message;
 }

@@ -1,5 +1,6 @@
 package com.example.mobilee_backend.auth.model;
 
+import com.example.mobilee_backend.auth.model.AgentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -17,23 +18,23 @@ public class OperationEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String reference;
+    private String reference;               // référence unique auto-générée
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeOperation type;
+    private TypeOperation type;             // RETRAIT ou DEPOT
 
     @Column(nullable = false)
     private Double montant;
 
     @Column(nullable = false)
-    private Double commission;
+    private Double commission;              // calculée automatiquement
 
     @Column(name = "nom_client")
     private String nomClient;
 
     @Column(name = "telephone_client")
-    private String telephoneClient;
+    private String telephoneClient;         // nouveau champ
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -44,30 +45,19 @@ public class OperationEntity {
 
     @PrePersist
     public void prePersist() {
-        // 1. Gestion de la date
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-
-        // 2. Référence unique (10 chiffres)
+        if (this.createdAt == null) this.createdAt = LocalDateTime.now();
+        // Référence unique : 10 chiffres aléatoires
         if (this.reference == null) {
-            long min = 1_000_000_000L;
-            long max = 9_999_999_999L;
-            long randomTenDigitNumber = min + (long) (Math.random() * (max - min));
-            this.reference = String.valueOf(randomTenDigitNumber);
+            long ref = 1_000_000_000L + (long)(Math.random() * 9_000_000_000L);
+            this.reference = String.valueOf(ref);
         }
-
-        // 3. Calcul automatique de la commission (Correction de l'accolade ici)
-        if (this.montant != null && this.type != null) {
-            if (this.type == TypeOperation.RETRAIT) {
-                this.commission = this.montant * 0.01; // Généralement 1% pour retrait, j'ai ajusté ton 0.50 (50%)
-            } else {
-                this.commission = this.montant * 0.005; // Exemple 0.5% pour dépôt
-            }
-        } else if (this.commission == null) {
-            this.commission = 0.0;
+        // Calcul automatique commission
+        if (this.type == TypeOperation.RETRAIT) {
+            this.commission = this.montant * 0.50;
+        } else {
+            this.commission = this.montant * 0.05;
         }
-    } // Fin de la méthode prePersist
+    }
 
     public enum TypeOperation { RETRAIT, DEPOT }
 }
