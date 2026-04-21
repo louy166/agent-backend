@@ -20,7 +20,10 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Routes publiques (pas besoin d'authentification)
+                        // 1. AUTORISER L'INTERFACE ADMIN (fichiers statiques)
+                        .requestMatchers("/", "/index.html", "/static/**", "/favicon.ico").permitAll()
+
+                        // 2. VOS ROUTES PUBLIQUES EXISTANTES
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
@@ -32,6 +35,7 @@ public class SecurityConfig {
                                 "/api/admin/**",
                                 "/api/profile/**"
                         ).permitAll()
+
                         // Toutes les autres routes nécessitent un JWT valide
                         .anyRequest().authenticated()
                 );
