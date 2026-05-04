@@ -7,6 +7,7 @@ import com.example.mobilee_backend.auth.repository.AgentRepository;
 import com.example.mobilee_backend.auth.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,13 +29,24 @@ public class DashboardService {
         LocalDateTime debutJour = LocalDate.now().atStartOfDay();
         LocalDateTime finJour   = debutJour.plusDays(1).minusSeconds(1);
 
+        // Commissions
         Double commissionsGlobal     = operationRepository.totalCommissions(agentId);
         Double commissionsAujourdhui = operationRepository.totalCommissionsJour(agentId, debutJour, finJour);
-        Double montantGlobal         = operationRepository.totalMontant(agentId);
-        Double montantAujourdhui     = operationRepository.totalMontantJour(agentId, debutJour, finJour);
-        Long   opsAujourdhui         = operationRepository.countByAgentIdAndCreatedAtBetween(agentId, debutJour, finJour);
-        Long   opsTotal              = (long) operationRepository.findByAgentIdOrderByCreatedAtDesc(agentId).size();
 
+        // Montant du jour
+        Double montantAujourdhui = operationRepository.totalMontantJour(agentId, debutJour, finJour);
+
+        // Solde caisse = total dépôts - total retraits
+        Double totalDepots   = operationRepository.totalMontantParTypeGlobal(agentId, OperationEntity.TypeOperation.DEPOT);
+        Double totalRetraits = operationRepository.totalMontantParTypeGlobal(agentId, OperationEntity.TypeOperation.RETRAIT);
+        Double soldeCaisse   = (totalDepots != null ? totalDepots : 0.0)
+                - (totalRetraits != null ? totalRetraits : 0.0);
+
+        // Compteurs
+        Long opsAujourdhui = operationRepository.countByAgentIdAndCreatedAtBetween(agentId, debutJour, finJour);
+        Long opsTotal      = (long) operationRepository.findByAgentIdOrderByCreatedAtDesc(agentId).size();
+
+        // 5 dernières opérations
         List<OperationEntity> ops = operationRepository
                 .findByAgentIdOrderByCreatedAtDesc(agentId).stream().limit(5).collect(Collectors.toList());
 
@@ -57,7 +69,7 @@ public class DashboardService {
                         .nomAgence(agent.getNomAgence())
                         .totalCommissionsGlobal(commissionsGlobal)
                         .totalCommissionsAujourdhui(commissionsAujourdhui)
-                        .totalMontantGlobal(montantGlobal)
+                        .totalMontantGlobal(soldeCaisse)      // ← solde caisse = dépôts - retraits
                         .totalMontantAujourdhui(montantAujourdhui)
                         .nombreOperationsAujourdhui(opsAujourdhui)
                         .nombreOperationsTotal(opsTotal)
