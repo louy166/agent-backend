@@ -42,6 +42,18 @@ public class AuthController {
         }
     }
 
+    /** POST /api/auth/login-phone */
+    @PostMapping("/login-phone")
+    public ResponseEntity<?> loginByPhone(@Valid @RequestBody LoginByPhoneRequest request) {
+        try {
+            AuthResponse response = authService.loginByPhone(request);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("erreur", e.getMessage()));
+        }
+    }
+
     /** POST /api/auth/forgot-password — Étape 1 : vérifier que l'email existe */
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
