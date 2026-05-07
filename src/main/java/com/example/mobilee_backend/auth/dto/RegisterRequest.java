@@ -11,7 +11,7 @@ public class RegisterRequest {
     private String nom;
 
     @NotBlank(message = "Le téléphone est obligatoire")
-    @Pattern(regexp = "^[234][0-9]{7}$", message = "Le téléphone doit commencer par 2, 3 ou 4 et contenir 8 chiffres")
+    @Pattern(regexp = "^[0-9]{8}$", message = "Le téléphone doit contenir 8 chiffres")
     private String telephone;
 
     @NotBlank(message = "L'email est obligatoire")
