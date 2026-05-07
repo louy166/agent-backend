@@ -8,7 +8,7 @@ import lombok.Data;
 public class LoginByPhoneRequest {
 
     @NotBlank(message = "Le téléphone est obligatoire")
-    @Pattern(regexp = "^[0-9]{8}$", message = "Le téléphone doit contenir 8 chiffres")
+    @Pattern(regexp = "^[234][0-9]{7}$", message = "Le téléphone doit commencer par 2, 3 ou 4 et contenir 8 chiffres")
     private String telephone;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
