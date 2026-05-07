@@ -16,8 +16,11 @@ public class OperationRequest {
 
     private String nomClient;
 
-    private String telephoneClient;   // nouveau champ
+    private String telephoneClient;
 
     @NotNull(message = "L'agent ID est obligatoire")
     private Long agentId;
+
+    // Code requis uniquement pour les retraits
+    private String codeAgent;
 }
