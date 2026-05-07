@@ -28,7 +28,6 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/login-phone",
-
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
                                 "/api/dashboard/**",
